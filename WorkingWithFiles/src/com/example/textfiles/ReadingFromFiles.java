@@ -9,6 +9,10 @@ public class ReadingFromFiles
 {
     public static void main(String[] args) throws IOException
     {
+        int sum = 0;
+        int counter = 0;
+        double average;
+
         File file = new File("OutputFile.txt");
 
         if (file.exists())
@@ -17,10 +21,17 @@ public class ReadingFromFiles
 
             while (inputFile.hasNext())
             {
-                System.out.println(inputFile.nextLine());
+                sum = sum + inputFile.nextInt();
+                counter++;
             }
 
             inputFile.close();
+
+            average = sum / (double)counter;
+
+            JOptionPane.showMessageDialog(null, "Sum of all values: " + sum + "\n" +
+                    "The number of values: " + counter + "\n" +
+                    "The average is: " + average);
         }
         else
         {
