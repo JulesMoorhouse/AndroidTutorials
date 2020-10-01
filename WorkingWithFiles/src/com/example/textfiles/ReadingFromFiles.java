@@ -15,10 +15,10 @@ public class ReadingFromFiles
         {
             Scanner inputFile = new Scanner(file);
 
-            System.out.println(inputFile.nextLine());
-            System.out.println(inputFile.nextLine());
-            System.out.println(inputFile.nextLine());
-            System.out.println(inputFile.nextLine());
+            while (inputFile.hasNext())
+            {
+                System.out.println(inputFile.nextLine());
+            }
 
             inputFile.close();
         }
