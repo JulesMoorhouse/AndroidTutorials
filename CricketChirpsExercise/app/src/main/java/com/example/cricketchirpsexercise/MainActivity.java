@@ -25,10 +25,13 @@ public class MainActivity extends AppCompatActivity
 
     public void calcTemp(View view)
     {
-        int chirps = Integer.parseInt(txtChirps.getText().toString());
-        int temp = (chirps / 3) + 4;
-        String sentence = getString(R.string.lblApproxTemp, temp);
-        lblCalculation.setText(sentence);
-        lblCalculation.setVisibility(View.VISIBLE);
+        if (!txtChirps.getText().toString().isEmpty())
+        {
+            int chirps = Integer.parseInt(txtChirps.getText().toString());
+            int temp = (chirps / 3) + 4;
+            String sentence = getString(R.string.lblApproxTemp, temp);
+            lblCalculation.setText(sentence);
+            lblCalculation.setVisibility(View.VISIBLE);
+        }
     }
 }
