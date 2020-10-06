@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CCBFBC"
+    android:background="@color/colorPrimaryLight"
     tools:context=".MainActivity">
 
     <TextView
@@ -68,7 +68,7 @@
         android:layout_marginStart="87dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="87dp"
-        android:background="#604138"
+        android:background="@color/colorPrimary"
         android:onClick="calcTemp"
         android:text="@string/btnCalcTemp"
         android:textColor="#FFFFFF"
