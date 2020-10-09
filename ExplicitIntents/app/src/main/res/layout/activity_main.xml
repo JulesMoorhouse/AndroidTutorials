@@ -16,10 +16,11 @@
         android:layout_marginRight="20dp"
         android:ems="10"
         android:gravity="center_horizontal"
-        android:hint="Please enter your name"
+        android:hint="@string/please_enter_your_name"
         android:inputType="textPersonName"
         tools:layout_editor_absoluteX="74dp"
-        tools:layout_editor_absoluteY="32dp" />
+        tools:layout_editor_absoluteY="32dp"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/btnAct2"
@@ -29,12 +30,11 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:background="@color/colorPrimary"
-        android:text="Button"
+        android:text="@string/activity_2"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         tools:layout_editor_absoluteX="146dp"
-        tools:layout_editor_absoluteY="95dp"
-        tools:text="Activity 2" />
+        tools:layout_editor_absoluteY="95dp" />
 
     <Button
         android:id="@+id/btnAct3"
@@ -44,7 +44,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
         android:background="@color/colorPrimary"
-        android:text="Activity 3"
+        android:text="@string/activity_3"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         tools:layout_editor_absoluteX="147dp"
@@ -57,6 +57,6 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="20dp"
-        android:text="TextView" />
+        android:text="@string/data_from_activity_3_will_be_displayed_here" />
 
 </LinearLayout>
