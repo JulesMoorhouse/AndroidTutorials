@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView etName;
     TextView etPhone;
@@ -36,26 +36,26 @@ public class DetailActivity extends AppCompatActivity {
         ivNeutral.bringToFront();
         ivSad.bringToFront();
 
-        ivSmile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishActivity(R.drawable.smile);
-            }
-        });
+        ivSmile.setOnClickListener(this);
+        ivSad.setOnClickListener(this);
+        ivNeutral.setOnClickListener(this);
+    }
 
-        ivNeutral.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishActivity(R.drawable.neutral);
-            }
-        });
-
-        ivSad.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishActivity(R.drawable.sad);
-            }
-        });
+    @Override
+    public void onClick(View v)
+    {
+        if (v.getId() == R.id.ivSad)
+        {
+            finishActivity(R.drawable.sad);
+        }
+        else if (v.getId() == R.id.ivNeutral)
+        {
+            finishActivity(R.drawable.neutral);
+        }
+        else
+        {
+            finishActivity(R.drawable.smile);
+        }
     }
 
     public void finishActivity(int drawableId)
