@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse(webUriString));
+                        Uri.parse("http://" + webUriString));
                 startActivity(intent);
             }
         });
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse(locactionUriString));
+                        Uri.parse("geo:0,0?q=" + locactionUriString));
                 startActivity(intent);
             }
         });
@@ -109,8 +110,9 @@ public class MainActivity extends AppCompatActivity {
 
             if (resultCode == RESULT_CANCELED)
             {
-                //tvResults.setText("No data received!");
                 layoutMain.setVisibility(View.GONE);
+                Toast.makeText(this, "No data received!", Toast.LENGTH_SHORT).show();
+
             }
         }
     }
