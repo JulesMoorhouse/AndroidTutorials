@@ -15,10 +15,17 @@ import java.util.ArrayList;
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder>
 {
     private ArrayList<Person> people;
+    ItemClicked activity;
+
+    public interface ItemClicked
+    {
+        void onItemClicked(int index);
+    }
 
     public PersonAdapter(Context context, ArrayList<Person> list)
     {
         people = list;
+        activity = (ItemClicked) context;
     }
 
     // Create the cell / row
@@ -27,7 +34,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
         ImageView ivPref;
         TextView tvName, tvSurname;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             tvName = itemView.findViewById(R.id.tvName);
@@ -36,8 +43,9 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.ViewHolder
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-
+                public void onClick(View v)
+                {
+                    activity.onItemClicked(people.indexOf((Person) v.getTag()));
                 }
             });
         }
