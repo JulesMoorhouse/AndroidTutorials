@@ -16,9 +16,17 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder>
 {
     private ArrayList<Car> cars;
 
+    ItemClicked activity;
+
+    public interface ItemClicked
+    {
+        void onItemClicked(int index);
+    }
+
     public CarAdapter(Context context, ArrayList<Car> list)
     {
         cars = list;
+        activity = (ItemClicked) context;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -38,7 +46,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder>
                 @Override
                 public void onClick(View v)
                 {
-
+                    activity.onItemClicked(cars.indexOf((Car)v.getTag()));
                 }
             });
         }
@@ -56,12 +64,14 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull CarAdapter.ViewHolder holder, int position)
     {
-        holder.itemView.setTag(cars.get(position));
+        Car car = cars.get(position);
 
-        holder.tvOwner.setText(cars.get(position).getOwnerName());
-        holder.tvModel.setText(cars.get(position).getModel());
+        holder.itemView.setTag(car);
 
-        if (cars.get(position).getMake().equals("Volkswagen"))
+        holder.tvOwner.setText(car.getOwnerName());
+        holder.tvModel.setText(car.getModel());
+
+        if (car.getMake().equals("Volkswagen"))
         {
             holder.ivMake.setImageResource(R.drawable.acme_cars);
         }
