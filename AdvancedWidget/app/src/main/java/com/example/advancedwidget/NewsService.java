@@ -17,10 +17,16 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -78,6 +84,26 @@ public class NewsService extends Service {
         }
     }
 
+    private String readStream(InputStream is) throws IOException {
+        StringBuilder sb = new StringBuilder();
+
+        CharsetDecoder decoder = Charset.forName("UTF-8").newDecoder();
+        decoder.onMalformedInput(CodingErrorAction.IGNORE);
+        decoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+
+        InputStreamReader isr = new InputStreamReader(is, decoder);
+
+        BufferedReader r = new BufferedReader(isr,1000);
+        for (String line = r.readLine(); line != null; line =r.readLine()){
+            sb.append(line);
+        }
+        is.close();
+
+        String data = sb.toString();
+        data = data.replaceAll("[^\\x20-\\x7e]", "");
+        return data;
+    }
+
     public class GetStoriesInBackground extends AsyncTask<Integer, Integer, String>
     {
 
@@ -86,14 +112,17 @@ public class NewsService extends Service {
 
             try {
 
-                URL url = new URL("http://feeds.news24.com/articles/news24/TopStories/rss");
+                URL url = new URL("https://feeds.news24.com/articles/news24/TopStories/rss");
+                InputStream is = url.openStream();
 
                 XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                 factory.setNamespaceAware(false);
                 XmlPullParser xpp = factory.newPullParser();
 
+                String content = readStream(is);
+
                 // We will get the XML from an input stream
-                xpp.setInput(getInputStream(url), "UTF_8");
+                xpp.setInput(new StringReader(content.replace("&","&amp;")));
 
                 /* We will parse the XML content looking for the "<title>" tag which appears inside the "<item>" tag.
                  * However, we should take in consideration that the rss feed name also is enclosed in a "<title>" tag.
