@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#90FFFFFF"
     android:padding="@dimen/widget_margin"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.AdvancedWidget.AppWidgetContainer">
@@ -21,7 +21,8 @@
             android:layout_width="120dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            app:srcCompat="@drawable/book" />
+            app:srcCompat="@drawable/book"
+            android:contentDescription="TODO" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -33,24 +34,29 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:layout_marginTop="12dp"
+                android:text="@string/title" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:layout_marginTop="3dp"
+                android:text="TextView"
+                android:textSize="16sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tvDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="5dp"
+        android:clickable="true"
         android:text="TextView" />
 
     <LinearLayout
@@ -62,7 +68,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/ivSync"
             android:layout_width="25dp"
             android:layout_height="25dp"
             app:srcCompat="@drawable/refresh" />
