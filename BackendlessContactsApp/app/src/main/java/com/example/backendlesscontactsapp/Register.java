@@ -8,13 +8,24 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 public class Register extends AppCompatActivity {
 
     private View mProgressView;
     private View mLoginFormView;
     private TextView tvLoad;
+
+    EditText etName, etMail, etPassword, etReEnter;
+    Button btnRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +35,66 @@ public class Register extends AppCompatActivity {
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         tvLoad = findViewById(R.id.tvLoad);
+
+        etName = findViewById(R.id.etRegisterName);
+        etMail = findViewById(R.id.etRegisterMail);
+        etPassword = findViewById(R.id.etRegisterPassword);
+        etReEnter = findViewById(R.id.etRegisterReEnter);
+        btnRegister = findViewById(R.id.btnRegisterRegister);
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String name = etName.getText().toString().trim();
+                String email = etMail.getText().toString().trim();
+                String password = etPassword.getText().toString().trim();
+                String reEnter = etReEnter.getText().toString().trim();
+
+                if (name.isEmpty() || email.isEmpty() || password.isEmpty() || reEnter.isEmpty())
+                {
+                    Toast.makeText(Register.this, "Please enter all details!",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    if (password.equals(reEnter))
+                    {
+                        BackendlessUser user = new BackendlessUser();
+                        user.setEmail(email);
+                        user.setPassword(password); // this does encrypt
+                        user.setProperty("name", name);
+
+                        showProgress(true);
+
+                        Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
+                            @Override
+                            public void handleResponse(BackendlessUser response) {
+
+                                showProgress(false);
+
+                                Toast.makeText(Register.this, "User successfully registered!", Toast.LENGTH_SHORT).show();
+                                Register.this.finish(); // take to previous activity
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+
+                                Toast.makeText(Register.this, "Error: " + fault.getMessage(),
+                                        Toast.LENGTH_SHORT).show();
+                                showProgress(false);
+                            }
+                        });
+                    }
+                    else
+                    {
+                        Toast.makeText(Register.this,
+                                "Please make sure that your password and ret-type password is the same!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
     }
 
     /**
