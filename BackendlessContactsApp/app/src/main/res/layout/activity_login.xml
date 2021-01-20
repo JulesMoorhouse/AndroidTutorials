@@ -25,7 +25,7 @@
         android:focusable="true"
         android:gravity="center_horizontal"
         android:text="Loading...please wait..."
-        android:textColor="?attr/colorPrimary"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         android:visibility="gone" />
 
