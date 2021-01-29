@@ -67,6 +67,7 @@ public class Register extends AppCompatActivity {
                         user.setProperty("name", name);
 
                         showProgress(true);
+                        tvLoad.setText("Busy registering user... please wait...");
 
                         Backendless.UserService.register(user, new AsyncCallback<BackendlessUser>() {
                             @Override

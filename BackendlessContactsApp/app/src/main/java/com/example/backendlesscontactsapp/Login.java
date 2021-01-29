@@ -19,6 +19,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.local.UserIdStorageFactory;
 
 public class Login extends AppCompatActivity {
 
@@ -45,6 +46,9 @@ public class Login extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLoginLogin);
         tvReset = findViewById(R.id.tvLoginReset);
 
+        showProgress(true);
+        tvLoad.setText("Checking login credentials... please wait...");
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +63,7 @@ public class Login extends AppCompatActivity {
                 else
                 {
                     showProgress(true);
+                    tvLoad.setText("Busy logging you in... please wait...");
 
                     Backendless.UserService.login(email, password, new AsyncCallback<BackendlessUser>() {
                         @Override
@@ -103,6 +108,7 @@ public class Login extends AppCompatActivity {
                 else
                 {
                     showProgress(true);
+                    tvLoad.setText("Busy sending reset instructions... please wait...");
 
                     //send a password resent email
                     Backendless.UserService.restorePassword(email, new AsyncCallback<Void>() {
@@ -123,6 +129,47 @@ public class Login extends AppCompatActivity {
                         }
                     });
                 }
+            }
+        });
+
+        // Login the user when app starts
+        Backendless.UserService.isValidLogin(new AsyncCallback<Boolean>() {
+            @Override
+            public void handleResponse(Boolean response) {
+
+                if (response)
+                {
+                    String userObjectId = UserIdStorageFactory.instance().getStorage().get();
+
+                    tvLoad.setText("Logging you in... please wait...");
+
+                    Backendless.Data.of(BackendlessUser.class).findById(userObjectId, new AsyncCallback<BackendlessUser>() {
+                        @Override
+                        public void handleResponse(BackendlessUser response) {
+
+                            startActivity(new Intent(Login.this, MainActivity.class));
+                            Login.this.finish();
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+
+                            Toast.makeText(Login.this, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            showProgress(false);
+                        }
+                    });
+                }
+                else
+                {
+                    showProgress(false);
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+
+                Toast.makeText(Login.this, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                showProgress(false);
             }
         });
     }
