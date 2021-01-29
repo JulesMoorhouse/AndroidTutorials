@@ -3,13 +3,16 @@ package com.example.backendlesscontactsapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.backendless.Backendless;
@@ -40,6 +43,16 @@ public class ContactList extends AppCompatActivity {
 
         lvList = findViewById(R.id.lvList);
 
+        lvList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = new Intent(ContactList.this, ContactInfo.class);
+                intent.putExtra("index", position);
+                startActivityForResult(intent, 1);
+            }
+        });
+
         String whereClause = "userEmail = '" + ApplicationClass.user.getEmail() + "'";
 
         DataQueryBuilder queryBuilder = DataQueryBuilder.create();
@@ -66,6 +79,16 @@ public class ContactList extends AppCompatActivity {
                 showProgress(false);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1)
+        {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     /**

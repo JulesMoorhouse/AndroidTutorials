@@ -3,6 +3,8 @@ package com.example.backendlesscontactsapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +25,8 @@ public class ContactInfo extends AppCompatActivity {
     ImageView ivCall, ivMail, ivEdit, ivDelete;
     EditText etInfoName, etInfoMail, etInfoPhone;
     Button btnInfoSubmit;
+
+    boolean edit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +51,30 @@ public class ContactInfo extends AppCompatActivity {
 
         btnInfoSubmit = findViewById(R.id.btnInfoSubmit);
 
+        etInfoName.setVisibility(View.GONE);
+        etInfoMail.setVisibility(View.GONE);
+        etInfoPhone.setVisibility(View.GONE);
+        btnInfoSubmit.setVisibility(View.GONE);
+
+        final int index = getIntent().getIntExtra("index", 0);
+
+        Contact contact = ApplicationClass.contacts.get(index);
+
+        etInfoName.setText(contact.getName());
+        etInfoMail.setText(contact.getEmail());
+        etInfoPhone.setText(contact.getNumber());
+
+        tvInfoChar.setText(contact.getName().toUpperCase().charAt(0) + "");
+        tvInfoName.setText(contact.getName());
+
         ivCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                String uri = "tel:" + ApplicationClass.contacts.get(index).getNumber();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse(uri));
+                startActivity(intent);
             }
         });
 
@@ -58,6 +82,10 @@ public class ContactInfo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/html");
+                intent.putExtra(Intent.EXTRA_EMAIL, ApplicationClass.contacts.get(index).getEmail());
+                startActivity(intent.createChooser(intent, "Send mail to " + ApplicationClass.contacts.get(index).getName()));
             }
         });
 
@@ -65,6 +93,22 @@ public class ContactInfo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                edit = !edit;
+
+                if (edit)
+                {
+                    etInfoName.setVisibility(View.VISIBLE);
+                    etInfoMail.setVisibility(View.VISIBLE);
+                    etInfoPhone.setVisibility(View.VISIBLE);
+                    btnInfoSubmit.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    etInfoName.setVisibility(View.GONE);
+                    etInfoMail.setVisibility(View.GONE);
+                    etInfoPhone.setVisibility(View.GONE);
+                    btnInfoSubmit.setVisibility(View.GONE);
+                }
             }
         });
 
