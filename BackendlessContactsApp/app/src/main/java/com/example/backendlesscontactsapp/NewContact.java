@@ -45,7 +45,7 @@ public class NewContact extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String name = etContactMail.getText().toString().trim();
+                String name = etContactName.getText().toString().trim();
                 String number = etContactNumber.getText().toString().trim();
                 String mail = etContactMail.getText().toString().trim();
 
