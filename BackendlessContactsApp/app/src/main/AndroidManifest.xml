@@ -3,6 +3,9 @@
     package="com.example.backendlesscontactsapp">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -13,13 +16,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BackendlessContactsApp">
+        <uses-library
+            android:name="com.google.android.wearable"
+            android:required="true" />
+
+        <!--
+               Set to true if your app is Standalone, that is, it does not require the handheld
+               app to run.
+        -->
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true" />
+
+        <activity
+            android:name=".ContactInfo"
+            android:label="@string/title_activity_contact_info"></activity>
         <activity
             android:name=".ContactList"
-            android:label="@string/title_activity_contact_list"></activity>
+            android:label="@string/title_activity_contact_list" />
         <activity
             android:name=".NewContact"
-            android:label="@string/title_activity_new_contact">
-        </activity>
+            android:label="@string/title_activity_new_contact"></activity>
         <activity android:name=".Register" />
         <activity android:name=".Login">
             <intent-filter>
