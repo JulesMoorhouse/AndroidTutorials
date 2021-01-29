@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Application;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -69,6 +70,7 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void handleResponse(BackendlessUser response) {
 
+                            ApplicationClass.user = response;
                             Toast.makeText(Login.this, "Logged in successfully!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(Login.this, MainActivity.class));
                             Login.this.finish();
@@ -147,6 +149,7 @@ public class Login extends AppCompatActivity {
                         @Override
                         public void handleResponse(BackendlessUser response) {
 
+                            ApplicationClass.user = response;
                             startActivity(new Intent(Login.this, MainActivity.class));
                             Login.this.finish();
                         }
