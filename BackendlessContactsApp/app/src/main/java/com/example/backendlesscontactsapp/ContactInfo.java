@@ -3,6 +3,7 @@ package com.example.backendlesscontactsapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -12,8 +13,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.backendless.Backendless;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 public class ContactInfo extends AppCompatActivity {
 
@@ -116,6 +123,44 @@ public class ContactInfo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                final AlertDialog.Builder dialog = new AlertDialog.Builder(ContactInfo.this);
+                dialog.setMessage("Are you sure you want to delete this contact?");
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        showProgress(true);
+                        tvLoad.setText("Deleting contact please wait");
+
+                        Backendless.Persistence.of(Contact.class).remove(ApplicationClass.contacts.get(index), new AsyncCallback<Long>() {
+                            @Override
+                            public void handleResponse(Long response) {
+
+                                ApplicationClass.contacts.remove((index));
+                                Toast.makeText(ContactInfo.this, "Contact successfully removed!", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK);
+                                ContactInfo.this.finish();
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault fault) {
+
+                                Toast.makeText(ContactInfo.this, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                                showProgress(false);
+                            }
+                        });
+
+                    }
+                });
+
+                dialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                dialog.show();
             }
         });
 
@@ -123,6 +168,44 @@ public class ContactInfo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                String name = etInfoName.getText().toString().trim();
+                String mail = etInfoMail.getText().toString().trim();
+                String phone = etInfoPhone.getText().toString().trim();
+
+                if (name.isEmpty() || mail.isEmpty() || phone.isEmpty())
+                {
+                    Toast.makeText(ContactInfo.this, "Please enter all details!", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    ApplicationClass.contacts.get(index).setName(name);
+                    ApplicationClass.contacts.get(index).setNumber(phone);
+                    ApplicationClass.contacts.get(index).setEmail(mail);
+                    
+                    showProgress(true);
+                    tvLoad.setText("Updating contact... please wait...");
+
+                    Backendless.Persistence.save(ApplicationClass.contacts.get(index), new AsyncCallback<Contact>() {
+                        @Override
+                        public void handleResponse(Contact response) {
+
+                            Contact contact = ApplicationClass.contacts.get(index);
+
+                            tvInfoChar.setText(contact.getName().toUpperCase().charAt(0) + "");
+                            tvInfoName.setText(contact.getName());
+                            Toast.makeText(ContactInfo.this, "Contact successfully updated!", Toast.LENGTH_SHORT).show();
+                            showProgress(false);
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault fault) {
+
+                            Toast.makeText(ContactInfo.this, "Error: " + fault.getMessage(), Toast.LENGTH_SHORT).show();
+                            showProgress(false);
+                        }
+                    });
+
+                }
             }
         });
     }
